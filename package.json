@@ -10,6 +10,7 @@
   "license": "MIT",
   "scripts": {
     "storybook": "start-storybook -p 9001 -c .storybook",
+    "postinstall": "tsc",
     "test": "jest"
   },
   "dependencies": {
