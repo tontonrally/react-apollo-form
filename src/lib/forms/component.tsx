@@ -1,14 +1,14 @@
 // tslint:disable:no-any
-import { ApolloClient } from 'apollo-client';
-import { JSONSchema6 } from 'json-schema';
-import * as React from 'react';
+import { ApolloClient } from "apollo-client";
+import { JSONSchema6 } from "json-schema";
+import * as React from "react";
 import {
     IChangeEvent,
     UiSchema,
     WidgetProps
-} from 'react-jsonschema-form';
-import { getTheme, ApolloFormTheme, ErrorListComponent } from './renderers';
-import { FormRenderer } from './renderers';
+} from "react-jsonschema-form";
+import { getTheme, ApolloFormTheme, ErrorListComponent } from "./renderers";
+import { FormRenderer } from "./renderers";
 import {
     applyConditionsToSchema,
     cleanData,
@@ -16,7 +16,7 @@ import {
     isMutationConfig,
     ApolloFormConfig,
     ReactJsonschemaFormError
-} from './utils';
+} from "./utils";
 
 // see https://github.com/wittydeveloper/react-apollo-form/wiki/Getting-started:-build-a-GraphQL-Form-in-5-minutes
 export type ApolloFormProps<T> = {
@@ -63,10 +63,10 @@ export interface ApolloRenderProps {
 }
 
 export interface ApolloFormConfigureTheme {
-    templates?: ApolloFormTheme['templates'];
-    widgets?: ApolloFormTheme['widgets'];
-    fields?: ApolloFormTheme['fields'];
-    renderers?: Partial<ApolloFormTheme['renderers']>;
+    templates?: ApolloFormTheme["templates"];
+    widgets?: ApolloFormTheme["widgets"];
+    fields?: ApolloFormTheme["fields"];
+    renderers?: Partial<ApolloFormTheme["renderers"]>;
 }
 
 export interface ApolloFormConfigureOptions {
@@ -116,7 +116,7 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
                 data: this.props.data,
                 schemaWithConditionals: applyConditionsToSchema(
                     schema,
-                    this.props.ui,
+                    this.props.ui? this.props.ui : {},
                     this.state.data
                 )
             }));
@@ -137,7 +137,7 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
                             () => this.setState({
                                 schemaWithConditionals: applyConditionsToSchema(
                                     this.state.schema,
-                                    this.props.ui,
+                                    this.props.ui? this.props.ui : {},
                                     this.state.data
                                 )
                             })
@@ -151,7 +151,7 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
                         () => this.setState({
                             schemaWithConditionals: applyConditionsToSchema(
                                 this.state.schema,
-                                this.props.ui,
+                                this.props.ui? this.props.ui : {},
                                 this.state.data
                             )
                         })
@@ -195,13 +195,13 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
         onChange = (data: IChangeEvent) => {
             const newSchema = applyConditionsToSchema(
                 this.state.schema,
-                this.props.ui,
+                this.props.ui? this.props.ui : {},
                 data.formData
             );
             this.setState(
                 () => ({
                     isDirty: true,
-                    data: cleanData(data.formData, newSchema.properties),
+                    data: cleanData(data.formData, newSchema.properties? newSchema.properties: {}),
                     schemaWithConditionals: newSchema,
                     hasError: data.errors.length > 0,
                     isSaved: false
@@ -222,7 +222,7 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
 
         childrenProps = (): ApolloRenderProps => ({
             // renderers
-            header: () => theme.renderers.header({ title: this.props.title || 'Form' }),
+            header: () => theme.renderers.header({ title: this.props.title || "Form" }),
             form: this.renderForm,
             buttons: () => theme.renderers.buttons({
                 cancelButtonRenderer: theme.renderers.cancelButton,
@@ -251,7 +251,6 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
         })
 
         renderLayout = () => {
-            const { props } = this;
             const { buttons, header, form } = this.childrenProps();
             return (
                 <div>
@@ -281,14 +280,14 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
                     subTitle={this.props.subTitle}
                     isDirty={this.state.isDirty}
                 >
-                    <input type="submit" style={{ display: 'none' }} ref={el => this.submitBtn = el} />
+                    <input type="submit" style={{ display: "none" }} ref={el => this.submitBtn = el} />
                 </FormRenderer>
             );
         }
 
         render() {
             const { props } = this;
-            const children = props.children as ApolloFormProps<MutationNamesType>['children'];
+            const children = props.children as ApolloFormProps<MutationNamesType>["children"];
             return (
                 children ?
                     children(this.childrenProps()) :

@@ -1,6 +1,5 @@
 import {
-    buildSchema,
-    GraphQLSchema
+    buildSchema
 } from 'graphql';
 
 export const mocks = {

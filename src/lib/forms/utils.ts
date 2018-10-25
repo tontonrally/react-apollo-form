@@ -1,6 +1,6 @@
 // tslint:disable:no-any
 import { PureQueryOptions } from 'apollo-client';
-import { every, reduce } from 'async';
+// import { every, reduce } from 'async';
 import { DocumentNode } from 'graphql';
 import { JSONSchema6 } from 'json-schema';
 import {
@@ -14,13 +14,13 @@ import {
     transform,
     uniq,
     unset,
-    Dictionary,
-    MemoVoidDictionaryIterator
+    // Dictionary,
+    // MemoVoidDictionaryIterator
 } from 'lodash';
 import { RefetchQueriesProviderFn } from 'react-apollo';
 import { UiSchema } from 'react-jsonschema-form';
 import { retrieveSchema } from 'react-jsonschema-form/lib/utils';
-import { isObject } from 'util';
+// import { isObject } from 'util';
 import { ApolloFormUi } from './component';
 import { ApolloFormBuilder } from './definitions';
 
@@ -97,7 +97,7 @@ const applyConditionsReducer =
                 Object.assign(
                     acc,
                     {
-                        [prop]: {
+                        [`${prop}`]: {
                             type: 'object',
                             properties: {},
                             ...(curr.required ? { required: curr.required } : {})
@@ -105,7 +105,7 @@ const applyConditionsReducer =
                     }
                 );
                 map(curr.properties, (v, k) => {
-                    (acc as any)[prop].properties[k] =
+                    (acc as any)[`${prop}`].properties[k] =
                         applyConditionsReducer(ui, data)({}, v as JSONSchema6, `${key}.${k}`);
                 });
             } else {

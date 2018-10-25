@@ -2,7 +2,7 @@ import { schema, types } from 'functional-json-schema';
 import { JSONSchema6 } from 'json-schema';
 import { merge } from 'lodash';
 import { UiSchema } from 'react-jsonschema-form';
-import { ApolloFormUi } from '../../lib/forms/component';
+import { ApolloFormUi } from '../../src/lib/forms/component';
 import {
     applyConditionsToSchema,
     cleanData,
@@ -11,7 +11,7 @@ import {
     isMutationConfig,
     ApolloFormConfigManual,
     ApolloFormConfigMutation
-} from '../../lib/forms/utils';
+} from '../../src/lib/forms/utils';
 
 describe('forms/utils', () => {
 

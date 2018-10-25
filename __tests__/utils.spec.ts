@@ -1,5 +1,5 @@
 import { IntrospectionQuery } from 'graphql';
-import { extractMutationsNamesFromIntrospection } from '../lib/utils';
+import { extractMutationsNamesFromIntrospection } from '../src/lib/utils';
 
 describe('utils', () => {
 

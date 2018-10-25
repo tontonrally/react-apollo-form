@@ -1,19 +1,34 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "skipLibCheck": true,
-        "target": "es5",
-        "newLine": "LF",
-        "jsx": "react",
-        "lib": [
-            "es7",
-            "es6",
-            "dom"
-        ],
-        "declaration": true,
-        "outDir": "./dist",
-        "rootDir": "."
-    }
-}
+      "baseUrl": "./src",
+      "outDir": "dist",
+      "module": "commonjs",
+      "target": "es5",
+      "lib": ["es6", "dom", "esnext.asynciterable"],
+      "declaration": true,
+      "sourceMap": true,
+      "jsx": "react",
+      "moduleResolution": "node",
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noImplicitAny": true,
+      "importHelpers": true,
+      "strictNullChecks": true,
+      "suppressImplicitAnyIndexErrors": true,
+      "noUnusedLocals": true,
+      "resolveJsonModule": true,
+      "skipLibCheck": true,
+      "removeComments": true,
+    },
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "exclude": [
+      "node_modules",
+      "dist",
+      "stories",
+      "__tests__"
+    ]
+  }
+  

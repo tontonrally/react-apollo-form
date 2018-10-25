@@ -1,19 +1,19 @@
 // tslint:disable-next-line:no-unused-variable
-import { storiesOf } from '@storybook/react';
-import { graphqlSync, introspectionQuery, IntrospectionQuery } from 'graphql';
-import { fromIntrospectionQuery } from 'graphql-2-json-schema';
-import gql from 'graphql-tag';
-import { JSONSchema6 } from 'json-schema';
-import { keys } from 'lodash';
-import * as React from 'react';
-import { ApolloConsumer } from 'react-apollo';
-import { FieldProps } from 'react-jsonschema-form';
-import { schema as mockSchema } from '../graphql-mock';
-import { configure, ApolloFormConfigureTheme } from '../lib/forms/component';
-import { ErrorListComponent } from '../lib/forms/renderers';
-import { ReactJsonschemaFormError } from '../lib/forms/utils';
-const { Button, Input, Checkbox, Header, Form, Message } = require('semantic-ui-react');
-const { withKnobs, select, boolean: bool } = require('@storybook/addon-knobs/react');
+import { storiesOf } from "@storybook/react";
+import { graphqlSync, introspectionQuery, IntrospectionQuery } from "graphql";
+import { fromIntrospectionQuery } from "graphql-2-json-schema";
+import gql from "graphql-tag";
+import { JSONSchema6 } from "json-schema";
+// import { keys } from "lodash";
+import * as React from "react";
+import { ApolloConsumer } from "react-apollo";
+import { FieldProps } from "react-jsonschema-form";
+import { schema as mockSchema } from "../graphql-mock";
+import { configure, ApolloFormConfigureTheme } from "../lib/forms/component";
+import { ErrorListComponent } from "../lib/forms/renderers";
+import { ReactJsonschemaFormError } from "../lib/forms/utils";
+const { Button, Input, Checkbox, Header, Form, Message } = require("semantic-ui-react");
+const { withKnobs, select, boolean: bool } = require("@storybook/addon-knobs/react");
 
 const introspection = graphqlSync(mockSchema, introspectionQuery).data as IntrospectionQuery;
 const jsonSchema = fromIntrospectionQuery(introspection);
@@ -47,7 +47,7 @@ const theme: ApolloFormConfigureTheme = {
             const { description, children, label } = props;
             return (
                 <Form.Field>
-                    <label>{label}{props.required && '*'}</label>
+                    <label>{label}{props.required && "*"}</label>
                     {children}
                     <span>{description}</span>
                 </Form.Field>
@@ -93,25 +93,25 @@ const theme: ApolloFormConfigureTheme = {
     }
 };
 
-storiesOf('ApolloForm', module)
+storiesOf("ApolloForm", module)
     .addDecorator(withKnobs)
-    .add('default forms', () => {
+    .add("default forms", () => {
         return (
             <ApolloConsumer>
                 {client => {
-                    const withTheme = bool('withTheme', true);
-                    const liveValidate = bool('liveValidate', false);
-                    const showErrorsList = bool('showErrorsList', true);
+                    const withTheme = bool("withTheme", true);
+                    const liveValidate = bool("liveValidate", false);
+                    const showErrorsList = bool("showErrorsList", true);
                     const ApplicationForm = configure({
                         client,
                         jsonSchema,
                         theme: withTheme ? theme : undefined
                     });
-                    const mutations = keys((jsonSchema.properties.Mutation as JSONSchema6).properties);
-                    const mutationName = select('Mutation', mutations, 'create_todo');
+                    //const mutations = keys((jsonSchema.properties.Mutation as JSONSchema6).properties);
+                    const mutationName = select("Mutation', mutations, 'create_todo");
                     return (
                         <ApplicationForm
-                            title={'Todo Form'}
+                            title={"Todo Form"}
                             liveValidate={liveValidate}
                             config={{
                                 mutation: {
@@ -125,10 +125,10 @@ storiesOf('ApolloForm', module)
                                 errorListComponent: ErrorList,
                                 todo: {
                                     name: {
-                                        'ui:label': 'Task name'
+                                        "ui:label": "Task name"
                                     },
                                     completed: {
-                                        'ui:label': 'is task completed?'
+                                        "ui:label": "is task completed?"
                                     }
                                 }
                             }}
@@ -137,7 +137,7 @@ storiesOf('ApolloForm', module)
                             {
                                 form => (
                                     <Form>
-                                        <div style={{ padding: '20px' }}>
+                                        <div style={{ padding: "20px" }}>
                                             {form.header()}
                                             {form.form()}
                                             {form.buttons()}
@@ -151,13 +151,13 @@ storiesOf('ApolloForm', module)
                 }}
             </ApolloConsumer>
         );
-    }).add('with conditionals', () => {
+    }).add("with conditionals", () => {
         return (
             <ApolloConsumer>
                 {client => {
-                    const withTheme = bool('withTheme', true);
-                    const liveValidate = bool('liveValidate', false);
-                    const showErrorsList = bool('showErrorsList', true);
+                    const withTheme = bool("withTheme", true);
+                    const liveValidate = bool("liveValidate", false);
+                    const showErrorsList = bool("showErrorsList", true);
                     const ApplicationForm = configure({
                         client,
                         jsonSchema,
@@ -166,21 +166,21 @@ storiesOf('ApolloForm', module)
 
                     return (
                         <ApplicationForm
-                            title={'Todo Form'}
+                            title={"Todo Form"}
                             liveValidate={liveValidate}
                             config={{
-                                name: 'todo',
+                                name: "todo",
                                 schema: {
-                                    type: 'object',
+                                    type: "object",
                                     properties: {
                                         shipping: {
-                                            type: 'object',
+                                            type: "object",
                                             properties: {
-                                                billingSameAsDelivery: { type: 'boolean' },
+                                                billingSameAsDelivery: { type: "boolean" },
                                                 billing: {
-                                                    type: 'object',
+                                                    type: "object",
                                                     properties: {
-                                                        address: { type: 'string' }
+                                                        address: { type: "string" }
                                                     }
                                                 }
                                             }
@@ -189,7 +189,7 @@ storiesOf('ApolloForm', module)
                                 } as JSONSchema6,
                                 saveData: data => {
                                     // tslint:disable-next-line:no-console
-                                    console.log('save !', data);
+                                    console.log("save !", data);
                                 }
                             }}
                             data={{}}
@@ -198,8 +198,8 @@ storiesOf('ApolloForm', module)
                                 errorListComponent: ErrorList,
                                 shipping: {
                                     billing: {
-                                        'ui:if': {
-                                            'shipping.billingSameAsDelivery': true
+                                        "ui:if": {
+                                            "shipping.billingSameAsDelivery": true
                                         },
                                     }
                                 }
@@ -209,7 +209,7 @@ storiesOf('ApolloForm', module)
                             {
                                 form => (
                                     <Form>
-                                        <div style={{ padding: '20px' }}>
+                                        <div style={{ padding: "20px" }}>
                                             {form.header()}
                                             {form.form()}
                                             {form.buttons()}

@@ -15,7 +15,11 @@ export const extractMutationsNamesFromFile = (filePath: string): string[] | void
 };
 
 export const extractMutationsNamesFromIntrospection = (introspection: IntrospectionQuery): string[] | void => {
-    const { name: mutationType } = introspection.__schema.mutationType;
+    if (!introspection.__schema.mutationType) {
+        return [];
+    }
+
+    const mutationType = introspection.__schema.mutationType.name;
     const mutations =
         introspection.__schema.types.find(t => t.name === mutationType) as (IntrospectionObjectType | undefined);
     return mutations ?
