@@ -12,8 +12,10 @@ import { schema as mockSchema } from "../graphql-mock";
 import { configure, ApolloFormConfigureTheme } from "../lib/forms/component";
 import { ErrorListComponent } from "../lib/forms/renderers";
 import { ReactJsonschemaFormError } from "../lib/forms/utils";
-const { Button, Input, Checkbox, Header, Form, Message } = require("semantic-ui-react");
-const { withKnobs, select, boolean: bool } = require("@storybook/addon-knobs/react");
+import {Button, Input, Checkbox, Header, Form, Message} from "semantic-ui-react";
+import { withKnobs, select, boolean as bool } from "@storybook/addon-knobs/react";
+import ApolloClient from "apollo-client";
+import { keys } from 'lodash';
 
 const introspection = graphqlSync(mockSchema, introspectionQuery).data as IntrospectionQuery;
 const jsonSchema = fromIntrospectionQuery(introspection);
@@ -98,7 +100,7 @@ storiesOf("ApolloForm", module)
     .add("default forms", () => {
         return (
             <ApolloConsumer>
-                {client => {
+                {(client: ApolloClient<any>) => {
                     const withTheme = bool("withTheme", true);
                     const liveValidate = bool("liveValidate", false);
                     const showErrorsList = bool("showErrorsList", true);
@@ -107,10 +109,15 @@ storiesOf("ApolloForm", module)
                         jsonSchema,
                         theme: withTheme ? theme : undefined
                     });
-                    //const mutations = keys((jsonSchema.properties.Mutation as JSONSchema6).properties);
-                    const mutationName = select("Mutation', mutations, 'create_todo");
+                    if (!(jsonSchema && jsonSchema.properties)) {
+                        return <></>;
+                    }
+
+                    const mutations = keys((jsonSchema.properties.Mutation as JSONSchema6).properties);
+                    const mutationName = select("Mutation", mutations, "create_todo");
                     return (
                         <ApplicationForm
+                            className=""
                             title={"Todo Form"}
                             liveValidate={liveValidate}
                             config={{
@@ -135,7 +142,7 @@ storiesOf("ApolloForm", module)
                             transformErrors={transformErrors}
                         >
                             {
-                                form => (
+                                (form: any) => (
                                     <Form>
                                         <div style={{ padding: "20px" }}>
                                             {form.header()}
@@ -154,7 +161,7 @@ storiesOf("ApolloForm", module)
     }).add("with conditionals", () => {
         return (
             <ApolloConsumer>
-                {client => {
+                {(client: ApolloClient<any>) => {
                     const withTheme = bool("withTheme", true);
                     const liveValidate = bool("liveValidate", false);
                     const showErrorsList = bool("showErrorsList", true);
@@ -166,6 +173,7 @@ storiesOf("ApolloForm", module)
 
                     return (
                         <ApplicationForm
+                            className=""
                             title={"Todo Form"}
                             liveValidate={liveValidate}
                             config={{
@@ -187,7 +195,7 @@ storiesOf("ApolloForm", module)
                                         }
                                     }
                                 } as JSONSchema6,
-                                saveData: data => {
+                                saveData: (data: any) => {
                                     // tslint:disable-next-line:no-console
                                     console.log("save !", data);
                                 }
@@ -207,7 +215,7 @@ storiesOf("ApolloForm", module)
                             transformErrors={transformErrors}
                         >
                             {
-                                form => (
+                                (form: any) => (
                                     <Form>
                                         <div style={{ padding: "20px" }}>
                                             {form.header()}
