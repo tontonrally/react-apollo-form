@@ -1,5 +1,5 @@
-import * as fs from 'fs';
-import { IntrospectionObjectType, IntrospectionQuery } from 'graphql';
+import * as fs from "fs";
+import { IntrospectionObjectType, IntrospectionQuery } from "graphql";
 
 // Given a schema.json (GraphQL Introspection Query dump)
 //  return all exposed mutations names
