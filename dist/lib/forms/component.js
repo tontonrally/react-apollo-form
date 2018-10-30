@@ -27,16 +27,16 @@ function configure(opts) {
                     var _b = _this.props, config = _b.config, onSave = _b.onSave;
                     if (utils_1.isMutationConfig(config)) {
                         var _c = config.mutation, document_1 = _c.document, variables = _c.variables, context = _c.context, refetchQueries = _c.refetchQueries;
-                        var data_1 = utils_1.cleanData(formData, _this.state.schema.properties || {});
+                        var data = utils_1.cleanData(formData, _this.state.schema.properties || {});
                         opts.client.mutate({
                             mutation: document_1,
                             refetchQueries: refetchQueries,
-                            variables: tslib_1.__assign({}, data_1, (variables || {})),
+                            variables: tslib_1.__assign({}, data, (variables || {})),
                             context: context
-                        }).then(function () {
+                        }).then(function (fetchResult) {
                             _this.setState(function () { return ({ isDirty: false, isSaved: true, hasError: false }); });
                             if (onSave) {
-                                onSave(data_1);
+                                onSave(fetchResult);
                             }
                         });
                     }
@@ -51,6 +51,8 @@ function configure(opts) {
                     }
                 };
                 _this.onChange = function (data) {
+                    console.log("on change");
+                    console.log(data);
                     var newSchema = utils_1.applyConditionsToSchema(_this.state.schema, _this.props.ui ? _this.props.ui : {}, data.formData);
                     _this.setState(function () { return ({
                         isDirty: true,
@@ -70,7 +72,9 @@ function configure(opts) {
                     }
                 };
                 _this.childrenProps = function () { return ({
-                    header: function () { return theme.renderers.header({ title: _this.props.title || "Form" }); },
+                    header: function () { return theme.renderers.header({
+                        title: _this.props.title || "Form", uiSchema: _this.props.ui,
+                    }); },
                     form: _this.renderForm,
                     buttons: function () { return theme.renderers.buttons({
                         cancelButtonRenderer: theme.renderers.cancelButton,
@@ -79,15 +83,17 @@ function configure(opts) {
                         save: _this.simulateSubmit,
                         hasError: _this.state.hasError,
                         isSaved: _this.state.isSaved,
-                        isDirty: _this.state.isDirty
+                        isDirty: _this.state.isDirty,
                     }); },
                     saveButton: function () { return theme.renderers.saveButton({
                         save: _this.simulateSubmit,
                         hasError: _this.state.hasError,
                         isDirty: _this.state.isDirty,
-                        isSaved: _this.state.isSaved
+                        isSaved: _this.state.isSaved,
                     }); },
-                    cancelButton: function () { return theme.renderers.cancelButton({ cancel: _this.cancel }); },
+                    cancelButton: function () { return theme.renderers.cancelButton({
+                        cancel: _this.cancel,
+                    }); },
                     cancel: _this.cancel,
                     save: _this.simulateSubmit,
                     data: _this.state.data,
@@ -97,15 +103,15 @@ function configure(opts) {
                 }); };
                 _this.renderLayout = function () {
                     var _a = _this.childrenProps(), buttons = _a.buttons, header = _a.header, form = _a.form;
-                    return (React.createElement("div", null,
+                    return (React.createElement(React.Fragment, null,
                         header(),
                         form(),
                         buttons()));
                 };
                 _this.renderForm = function () {
-                    return (React.createElement(renderers_2.FormRenderer, { theme: theme, onChange: _this.onChange, save: _this.save, transformErrors: _this.props.transformErrors ?
+                    return (React.createElement(renderers_2.FormRenderer, { className: _this.props.className, theme: theme, onChange: _this.onChange, save: _this.save, transformErrors: _this.props.transformErrors ?
                             _this.props.transformErrors :
-                            undefined, config: _this.props.config, ui: _this.props.ui, liveValidate: _this.props.liveValidate, schema: _this.state.schemaWithConditionals, data: _this.state.data, subTitle: _this.props.subTitle, isDirty: _this.state.isDirty },
+                            undefined, config: _this.props.config, ui: _this.props.ui, liveValidate: _this.props.liveValidate, validate: _this.props.validate, schema: _this.state.schemaWithConditionals, data: _this.state.data, subTitle: _this.props.subTitle, isDirty: _this.state.isDirty },
                         React.createElement("input", { type: "submit", style: { display: "none" }, ref: function (el) { return _this.submitBtn = el; } })));
                 };
                 return _this;

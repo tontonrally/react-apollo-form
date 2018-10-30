@@ -33,7 +33,7 @@ var ApolloFormBuilder;
                         prev[k] = curr;
                         return prev;
                     }, {}), options.exclude, "exclusive"),
-                    required: mutation.required ? mutation.required.filter(function (r) { return (options.exclude || []).indexOf(r) !== -1; }) : []
+                    required: mutation.required ? mutation.required.filter(function (r) { return (options.exclude || []).indexOf(r) === -1; }) : []
                 };
             }
             else {

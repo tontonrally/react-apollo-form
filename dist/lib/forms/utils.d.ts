@@ -1,7 +1,7 @@
-import { PureQueryOptions } from 'apollo-client';
-import { DocumentNode } from 'graphql';
-import { JSONSchema6 } from 'json-schema';
-import { RefetchQueriesProviderFn } from 'react-apollo';
+import { PureQueryOptions } from "apollo-client";
+import { DocumentNode } from "graphql";
+import { JSONSchema6 } from "json-schema";
+import { RefetchQueriesProviderFn } from "react-apollo";
 import { UiSchema } from 'react-jsonschema-form';
 import { ApolloFormUi } from './component';
 export declare type ApolloFormConfigBase = {

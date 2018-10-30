@@ -1,5 +1,5 @@
-import { JSONSchema6 } from 'json-schema';
-import * as React from 'react';
+import { JSONSchema6 } from "json-schema";
+import * as React from "react";
 import { ArrayFieldTemplateProps, FieldTemplateProps, ObjectFieldTemplateProps, UiSchema } from 'react-jsonschema-form';
 import { ApolloFormConfigureTheme, ApolloFormUi } from './component';
 import { ApolloFormConfig, ReactJsonschemaFormError } from './utils';
@@ -32,8 +32,9 @@ export interface ApolloFormTheme {
 export declare const getTheme: (theme?: ApolloFormConfigureTheme | undefined) => ApolloFormTheme;
 export interface TitleRendererProps {
     title: string;
+    uiSchema?: UiSchema & ApolloFormUi;
 }
-export declare const titleRenderer: ({ title }: TitleRendererProps) => JSX.Element;
+export declare const titleRenderer: ({ title, uiSchema }: TitleRendererProps) => JSX.Element;
 export interface SaveButtonRendererProps {
     save?: () => void;
     isSaved: boolean;
@@ -56,6 +57,7 @@ export interface ButtonsRendererProps {
 }
 export declare const buttonsRenderer: (props: ButtonsRendererProps) => JSX.Element;
 export interface FormRendererProps {
+    className: any;
     theme: ApolloFormTheme;
     onChange: (data: any) => void;
     save: (data: any) => void;
@@ -66,6 +68,9 @@ export interface FormRendererProps {
     ui?: UiSchema & ApolloFormUi;
     subTitle?: string;
     liveValidate?: boolean;
+    validate?: {
+        [key: string]: (formData: any, errors: any) => {};
+    };
     transformErrors?: any;
 }
 export interface FormContext {

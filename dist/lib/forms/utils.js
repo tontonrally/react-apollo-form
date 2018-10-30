@@ -23,7 +23,7 @@ exports.flattenSchemaProperties = function (entrySchema) {
 };
 var applyConditionsReducer = function (ui, data) {
     return function (acc, curr, key) {
-        var _a;
+        var _a, _b;
         var propUi = lodash_1.get(ui, key);
         var prop = lodash_1.last(key.split('.'));
         if (propUi && propUi['ui:if']) {
@@ -44,7 +44,9 @@ var applyConditionsReducer = function (ui, data) {
             });
         }
         else {
-            Object.assign(acc, curr);
+            Object.assign(acc, (_b = {},
+                _b["" + prop] = curr,
+                _b));
         }
         return acc;
     };
@@ -53,7 +55,8 @@ exports.applyConditionsToSchema = function (jsonSchema, ui, data) {
     var schema = lodash_1.cloneDeep(jsonSchema);
     return schema.properties ?
         Object.assign({}, schema, {
-            properties: lodash_1.transform(schema.properties, applyConditionsReducer(ui, data), {})
+            properties: lodash_1.transform(schema.properties, applyConditionsReducer(ui, data), {}),
+            required: schema.required
         }) :
         schema;
 };

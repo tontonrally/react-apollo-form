@@ -5,6 +5,7 @@ import { UiSchema, WidgetProps } from "react-jsonschema-form";
 import { ApolloFormTheme, ErrorListComponent } from "./renderers";
 import { ApolloFormConfig, ReactJsonschemaFormError } from "./utils";
 export declare type ApolloFormProps<T> = {
+    className: any;
     data: any;
     title?: string;
     subTitle?: string;
@@ -19,6 +20,9 @@ export declare type ApolloFormProps<T> = {
     ui?: UiSchema & ApolloFormUi;
     children?: React.SFC<ApolloRenderProps>;
     liveValidate?: boolean;
+    validate?: {
+        [key: string]: (formData: any, errors: any) => {};
+    };
     transformErrors?: (formName: string) => (errors: ReactJsonschemaFormError[]) => ReactJsonschemaFormError[];
 };
 export interface ApolloFormState {

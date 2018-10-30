@@ -18,7 +18,7 @@ exports.getTheme = function (theme) { return ({
     }
 }); };
 exports.titleRenderer = function (_a) {
-    var title = _a.title;
+    var title = _a.title, uiSchema = _a.uiSchema;
     return (React.createElement("h2", null, title));
 };
 exports.saveButtonRenderer = function (props) { return (React.createElement("button", { disabled: !!props.hasError || !props.isDirty, onClick: props.save }, props.isSaved ?
@@ -50,9 +50,18 @@ var FormRenderer = (function (_super) {
                     props.config.mutation.name :
                     props.config.name
         };
-        return (React.createElement(react_jsonschema_form_1.default, tslib_1.__assign({ liveValidate: utils_1.isTruthyWithDefault(props.liveValidate, false), schema: props.schema, uiSchema: props.ui || {}, widgets: props.theme.widgets, formContext: formContext, fields: props.theme.fields, formData: props.data, onSubmit: props.save, onChange: props.onChange, ArrayFieldTemplate: props.theme.templates.ArrayFieldTemplate, FieldTemplate: props.theme.templates.FieldTemplate, ObjectFieldTemplate: props.theme.templates.ObjectFieldTemplate, showErrorList: utils_1.isTruthyWithDefault(props.ui ? props.ui.showErrorsList : false, false) }, { ErrorList: props.ui ? props.ui.errorListComponent : undefined }, { transformErrors: props.transformErrors ?
+        return (React.createElement(react_jsonschema_form_1.default, tslib_1.__assign({ className: props.className, liveValidate: utils_1.isTruthyWithDefault(props.liveValidate, false), validate: function (formData, errors) {
+                if (props.validate) {
+                    var keys = Object.keys(props.validate);
+                    for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
+                        var key = keys_1[_i];
+                        props.validate[key](formData, errors);
+                    }
+                }
+                return errors;
+            }, schema: props.schema, uiSchema: props.ui || {}, widgets: props.theme.widgets, formContext: formContext, fields: props.theme.fields, formData: props.data, onSubmit: props.save, onChange: props.onChange, ArrayFieldTemplate: props.theme.templates.ArrayFieldTemplate, FieldTemplate: props.theme.templates.FieldTemplate, ObjectFieldTemplate: props.theme.templates.ObjectFieldTemplate, showErrorList: utils_1.isTruthyWithDefault(props.ui ? props.ui.showErrorsList : false, false) }, { ErrorList: props.ui ? props.ui.errorListComponent : undefined }, { transformErrors: props.transformErrors ?
                 props.transformErrors(formContext.formPrefix) :
-                undefined }), this.props.children));
+                undefined }), props.children));
     };
     return FormRenderer;
 }(React.Component));
