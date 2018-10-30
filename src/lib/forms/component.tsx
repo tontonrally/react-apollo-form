@@ -17,9 +17,11 @@ import {
     ApolloFormConfig,
     ReactJsonschemaFormError
 } from "./utils";
+import { FetchResult } from 'react-apollo';
 
 // see https://github.com/wittydeveloper/react-apollo-form/wiki/Getting-started:-build-a-GraphQL-Form-in-5-minutes
 export type ApolloFormProps<T> = {
+    className: any;
     data: any;
     title?: string;
     subTitle?: string;
@@ -30,6 +32,7 @@ export type ApolloFormProps<T> = {
     ui?: UiSchema & ApolloFormUi;
     children?: React.SFC<ApolloRenderProps>;
     liveValidate?: boolean;
+    validate?: {[key: string]: (formData: any, errors: any) => {}};
     transformErrors?: (formName: string) => (errors: ReactJsonschemaFormError[]) => ReactJsonschemaFormError[];
 };
 
@@ -174,10 +177,10 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
                         ...(variables || {})
                     },
                     context: context
-                }).then(() => {
+                }).then((fetchResult: FetchResult<{}, Record<string, any>>) => {
                     this.setState(() => ({ isDirty: false, isSaved: true, hasError: false }));
                     if (onSave) {
-                        onSave(data);
+                        onSave(fetchResult);
                     }
                 });
             } else {
@@ -193,6 +196,8 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
         }
 
         onChange = (data: IChangeEvent) => {
+            console.log("on change");
+            console.log(data);
             const newSchema = applyConditionsToSchema(
                 this.state.schema,
                 this.props.ui? this.props.ui : {},
@@ -222,7 +227,9 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
 
         childrenProps = (): ApolloRenderProps => ({
             // renderers
-            header: () => theme.renderers.header({ title: this.props.title || "Form" }),
+            header: () => theme.renderers.header({
+                title: this.props.title || "Form", uiSchema: this.props.ui,
+            }),
             form: this.renderForm,
             buttons: () => theme.renderers.buttons({
                 cancelButtonRenderer: theme.renderers.cancelButton,
@@ -231,15 +238,17 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
                 save: this.simulateSubmit,
                 hasError: this.state.hasError,
                 isSaved: this.state.isSaved,
-                isDirty: this.state.isDirty
+                isDirty: this.state.isDirty,
             }),
             saveButton: () => theme.renderers.saveButton({
                 save: this.simulateSubmit,
                 hasError: this.state.hasError,
                 isDirty: this.state.isDirty,
-                isSaved: this.state.isSaved
+                isSaved: this.state.isSaved,
             }),
-            cancelButton: () => theme.renderers.cancelButton({ cancel: this.cancel }),
+            cancelButton: () => theme.renderers.cancelButton({
+                cancel: this.cancel,
+            }),
             // actions
             cancel: this.cancel,
             save: this.simulateSubmit,
@@ -253,17 +262,18 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
         renderLayout = () => {
             const { buttons, header, form } = this.childrenProps();
             return (
-                <div>
+                <>
                     {header()}
                     {form()}
                     {buttons()}
-                </div>
+                </>
             );
         }
 
         renderForm = () => {
             return (
                 <FormRenderer
+                    className={this.props.className}
                     theme={theme}
                     onChange={this.onChange}
                     save={this.save}
@@ -275,6 +285,7 @@ export function configure<MutationNamesType = {}>(opts: ApolloFormConfigureOptio
                     config={this.props.config}
                     ui={this.props.ui}
                     liveValidate={this.props.liveValidate}
+                    validate={this.props.validate}
                     schema={this.state.schemaWithConditionals}
                     data={this.state.data}
                     subTitle={this.props.subTitle}

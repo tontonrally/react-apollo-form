@@ -1,5 +1,5 @@
-import { JSONSchema6 } from 'json-schema';
-import * as React from 'react';
+import { JSONSchema6 } from "json-schema";
+import * as React from "react";
 import Form, {
     ArrayFieldTemplateProps,
     FieldTemplateProps,
@@ -60,8 +60,8 @@ export const getTheme = (theme?: ApolloFormConfigureTheme): ApolloFormTheme => (
 // Those are all default renderers
 //  See: https://github.com/wittydeveloper/react-apollo-form/wiki/Theming
 
-export interface TitleRendererProps { title: string; }
-export const titleRenderer = ({ title }: TitleRendererProps) => (
+export interface TitleRendererProps { title: string; uiSchema?: UiSchema & ApolloFormUi }
+export const titleRenderer = ({ title, uiSchema }: TitleRendererProps) => (
     <h2>{title}</h2>
 );
 
@@ -85,7 +85,7 @@ export const saveButtonRenderer = (props: SaveButtonRendererProps) => (
     </button>
 );
 
-export interface CancelButtonRendererProps { cancel?: () => void; }
+export interface CancelButtonRendererProps { cancel?: () => void }
 export const cancelButtonRenderer = (props: CancelButtonRendererProps) => (
     <button
         type="button"
@@ -119,6 +119,7 @@ export const buttonsRenderer = (props: ButtonsRendererProps) => (
 );
 
 export interface FormRendererProps {
+    className: any;
     theme: ApolloFormTheme;
     // tslint:disable-next-line:no-any
     onChange: (data: any) => void;
@@ -132,6 +133,7 @@ export interface FormRendererProps {
     ui?: UiSchema & ApolloFormUi;
     subTitle?: string;
     liveValidate?: boolean;
+    validate?: {[key: string]: (formData: any, errors: any) => {}}
     // tslint:disable-next-line:no-any
     transformErrors?: any;
 }
@@ -158,9 +160,21 @@ export class FormRenderer extends React.Component<FormRendererProps> {
                     props.config.mutation.name :
                     props.config.name!
         };
+
         return (
             <Form
+                className={props.className}
                 liveValidate={isTruthyWithDefault(props.liveValidate, false)}
+                validate={(formData, errors) => {
+                    if (props.validate) {
+                        const keys = Object.keys(props.validate);
+                        for (const key of keys) {
+                            props.validate[key](formData, errors);
+                        }
+                    }
+
+                    return errors;
+                }}
                 schema={props.schema}
                 uiSchema={props.ui || {}}
                 widgets={props.theme.widgets}
@@ -181,7 +195,7 @@ export class FormRenderer extends React.Component<FormRendererProps> {
                         undefined
                 }
             >
-                {this.props.children}
+                {props.children}
             </Form>
         );
     }
