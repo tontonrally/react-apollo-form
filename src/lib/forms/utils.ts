@@ -1,8 +1,8 @@
 // tslint:disable:no-any
-import { PureQueryOptions } from 'apollo-client';
+import { PureQueryOptions } from "apollo-client";
 // import { every, reduce } from 'async';
-import { DocumentNode } from 'graphql';
-import { JSONSchema6 } from 'json-schema';
+import { DocumentNode } from "graphql";
+import { JSONSchema6 } from "json-schema";
 import {
     cloneDeep, filter, get,
     has, isPlainObject, isUndefined,
@@ -17,7 +17,7 @@ import {
     // Dictionary,
     // MemoVoidDictionaryIterator
 } from 'lodash';
-import { RefetchQueriesProviderFn } from 'react-apollo';
+import { RefetchQueriesProviderFn } from "react-apollo";
 import { UiSchema } from 'react-jsonschema-form';
 import { retrieveSchema } from 'react-jsonschema-form/lib/utils';
 // import { isObject } from 'util';
@@ -109,7 +109,9 @@ const applyConditionsReducer =
                         applyConditionsReducer(ui, data)({}, v as JSONSchema6, `${key}.${k}`);
                 });
             } else {
-                Object.assign(acc, curr);
+                Object.assign(acc, {
+                    [`${prop}`]: curr
+                });
             }
             return acc;
         };
@@ -126,7 +128,8 @@ export const applyConditionsToSchema =
                         schema.properties,
                         applyConditionsReducer(ui, data),
                         {}
-                    )
+                    ),
+                    required: schema.required
                 }
             ) :
             schema;

@@ -63,7 +63,7 @@ export namespace ApolloFormBuilder {
                             options.exclude!,
                             "exclusive"
                         ),
-                        required: mutation.required ? mutation.required.filter(r => (options.exclude || []).indexOf(r) !== -1) : []
+                        required: mutation.required ? mutation.required.filter(r => (options.exclude || []).indexOf(r) === -1) : []
                     };
                 } else {
                     console.error(`mutation ${name} has no arguments`);
